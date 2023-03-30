@@ -11,14 +11,15 @@ import { AppController } from 'src/app.controller';
     origin: '*'
   }
 })
+
 export class ChatGateway implements OnGatewayConnection, OnGatewayDisconnect {
   constructor(private chatService: ChatService, private app: AppController) { }
 
   @WebSocketServer() server: Server<ClientToServerListen, ServerToClientListen>
   @SubscribeMessage('message')
   async handleMessage(@MessageBody() message: Message): Promise<void> {
-    let keyRedis =message.username;
-    let valueRedis = message.message; 
+    const keyRedis =message.username;
+    const valueRedis = message.message; 
     this.app.setRedis(keyRedis, valueRedis);
     console.table(message)
     this.server.emit('message', message)
@@ -26,7 +27,7 @@ export class ChatGateway implements OnGatewayConnection, OnGatewayDisconnect {
 
   @SubscribeMessage('countMessage')
   async handleCountMessage(@MessageBody() message: Message) {
-    let keyRedis =message.username + ':' + message.date;
+    const keyRedis =message.username + ':' + message.date;
     message.countMessage = await this.app.getRedis(keyRedis);
     console.table(message)
     this.server.emit('message', message)

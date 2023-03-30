@@ -7,14 +7,14 @@ export class AppController {
   constructor(private readonly appService: AppService, @InjectRedis() private readonly redis: Redis) {}
 
   async getRedis(@Body() inputRedisKey: string) {
-    let redisResult = await this.redis.get(inputRedisKey);
+    const redisResult = await this.redis.get(inputRedisKey);
     return redisResult
   }
 
   async setRedis(@Body() inputKeyRedis: string, inputValueRedis: string) {
-    let date = new Date();
-    let keyRedis = inputKeyRedis + ':' + date.toLocaleDateString();
-    let valueRedis = Number(await this.redis.get(keyRedis)) + 1;
+    const date = new Date();
+    const keyRedis = inputKeyRedis + ':' + date.toLocaleDateString();
+    const valueRedis = Number(await this.redis.get(keyRedis)) + 1;
     await this.redis.set(keyRedis, valueRedis);
     console.log(`Введено в базу redis: ${keyRedis}, ${valueRedis}`);
   }
