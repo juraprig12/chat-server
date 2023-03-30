@@ -1,4 +1,4 @@
-version: '7.0'
+version: '3.8'
 services:
   redis:
     container_name: redis_chat
