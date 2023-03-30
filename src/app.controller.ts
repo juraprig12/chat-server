@@ -8,7 +8,7 @@ export class AppController {
 
   async getRedis(@Body() inputRedisKey: string) {
     const redisResult = await this.redis.get(inputRedisKey);
-    return redisResult
+    return redisResult;
   }
 
   async setRedis(@Body() inputKeyRedis: string, inputValueRedis: string) {
