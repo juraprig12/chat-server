@@ -1,0 +1,100 @@
+version: '7.0'
+services:
+  redis:
+    container_name: redis_chat
+    image: redis:7.0.7-alpine
+    restart: always
+    environment:
+      - REDIS_USER=${REDIS_USER}
+      - REDIS_PASSWORD=${REDIS_PASSWORD}
+      - REDIS_DATABASE=${REDIS_DATABASE}
+    volumes:
+     - ./redis_db/data:/data
+     - ./redis_db/redis.conf:/usr/local/etc/redis/redis.conf#     
+    ports:
+      - ${REDIS_PORT}:${REDIS_PORT}
+    command: redis-server
+
+# Запуск докер-контейнера с базой REDIS из командной строки терминала
+#========================================================================
+# docker run --name redis_chat -e REDIS_USER=root -e REDIS_PASSWORD=admin -p 6379:6379 -d redis:7.0.7-alpine
+
+# npm run migration:run  - выполнит одновременно за раз (все блоком) сгенерированные ранее миграции
+# npm run migration:down - сделает откат только одной последней миграции, после чего нужно было бы удалить файл этой миграции.
+
+# docker-compose up -d
+# docker-compose up --build   # Это строка выполнения при самом первом запуске "docker-compose.yaml"
+# А в контейнере из Docker-desktop в Терминале подключение к созданной в docker-compose БАЗЕ db_migration: 
+#                                                                            psql -U root -d db_migration
+
+# version: "3.8"
+# services:
+#   redis:
+#     image: redis:7.0.7-alpine
+#     container_name: redis_db
+#     restart: unless-stopped
+#     volumes:
+#       - ./redis_db/data:/data
+#       - ./redis_db/redis.conf:/usr/local/etc/redis/redis.conf
+#     ports:
+#       - '6379:6379'
+#     command: redis-server
+
+
+# version: '7.0'
+# services:
+#   redis:
+#     container_name: redis_db
+#     image: redis:7.0.7-alpine
+#     restart: always
+#     environment:
+#       - REDIS_USER=${TYPEORM_USERNAME}
+#       - REDIS_PASSWORD=${TYPEORM_PASSWORD}
+#       - REDIS_DATABASE=${REDIS_DATABASE}
+#     #volumes:
+#     # - ./redis_db/data:/data
+#     # - ./redis_db/redis.conf:/usr/local/etc/redis/redis.conf#     
+#     ports:
+#       - ${REDIS_PORT}:${REDIS_PORT}
+#     command: redis-server
+
+
+# version: "3.9"
+# services:
+#   db:
+#     image: postgres
+#     volumes:
+#       - ./tmp/db:/var/lib/postgresql/data
+#     ports:
+#       - 5432:5432
+#     environment:
+#       POSTGRES_USER: postgres
+#       POSTGRES_PASSWORD: password
+  
+#   redis:
+#     image: 'redis:5-alpine'
+#     command: redis-server
+#     ports:
+#       - '6379:6379'
+
+#   sidekiq:
+#     depends_on:
+#       - 'redis'
+#     build: .
+#     command: bundle exec sidekiq
+#     volumes:
+#       - '.:/project'
+#       - '/project/tmp' # don't mount tmp directory
+#     env_file:
+#     - .env
+  
+#   web:
+#     depends_on:
+#       - 'db'
+#       - 'sidekiq'
+#     build: .
+#     command: bash -c "rm -f tmp/pids/server.pid && bundle exec rails s -p 3000 -b '0.0.0.0'"
+#     volumes:
+#       - .:/myapp
+#     ports:
+#       - "3000:3000"
