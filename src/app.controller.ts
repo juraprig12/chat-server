@@ -13,7 +13,8 @@ export class AppController {
 
   async setRedis(@Body() inputKeyRedis: string, inputValueRedis: string) {
     const date = new Date();
-    const keyRedis = inputKeyRedis + ':' + date.toLocaleDateString();
+    inputValueRedis = date.toLocaleDateString();
+    const keyRedis = inputKeyRedis + ':' + inputValueRedis;
     const valueRedis = Number(await this.redis.get(keyRedis)) + 1;
     await this.redis.set(keyRedis, valueRedis);
     console.log(`Введено в базу redis: ${keyRedis}, ${valueRedis}`);

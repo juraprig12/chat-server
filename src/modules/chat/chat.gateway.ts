@@ -16,6 +16,7 @@ export class ChatGateway implements OnGatewayConnection, OnGatewayDisconnect {
   constructor(private chatService: ChatService, private app: AppController) { }
 
   @WebSocketServer() server: Server<ClientToServerListen, ServerToClientListen>
+  
   @SubscribeMessage('message')
   async handleMessage(@MessageBody() message: Message): Promise<void> {
     const keyRedis =message.username;
