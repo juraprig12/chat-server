@@ -17,10 +17,10 @@ export class ChatGateway implements OnGatewayConnection, OnGatewayDisconnect {
 
   @WebSocketServer() server: Server<ClientToServerListen, ServerToClientListen>
   @SubscribeMessage('message')
-  async handleMessage(@MessageBody() message: Message): Promise<void> {
+  async handleMessage(@MessageBody() message: Message) {
     const keyRedis =message.username;
     const valueRedis = message.message; 
-    this.app.setRedis(keyRedis, valueRedis);
+    await this.app.setRedis(keyRedis, valueRedis);
     console.table(message)
     this.server.emit('message', message)
   }
