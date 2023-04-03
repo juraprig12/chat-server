@@ -1,4 +1,4 @@
-import { ClientToServerListen, ServerToClientListen } from './types/WebSocketListen';
+import { ClientToServerListen, ServerToClientListen, ClientToServerListenCount, ServerToClientListenCount } from './types/WebSocketListen';
 import { ConnectedSocket, MessageBody, OnGatewayConnection, OnGatewayDisconnect, SubscribeMessage, WebSocketGateway, WebSocketServer } from "@nestjs/websockets";
 import { Server, Socket } from "socket.io";
 import { ChatService } from './chat.service';
@@ -16,7 +16,6 @@ export class ChatGateway implements OnGatewayConnection, OnGatewayDisconnect {
   constructor(private chatService: ChatService, private app: AppController) { }
 
   @WebSocketServer() server: Server<ClientToServerListen, ServerToClientListen>
-  
   @SubscribeMessage('message')
   async handleMessage(@MessageBody() message: Message): Promise<void> {
     const keyRedis =message.username;
@@ -26,12 +25,13 @@ export class ChatGateway implements OnGatewayConnection, OnGatewayDisconnect {
     this.server.emit('message', message)
   }
 
+  @WebSocketServer() serverCount: Server<ClientToServerListenCount, ServerToClientListenCount>
   @SubscribeMessage('countMessage')
   async handleCountMessage(@MessageBody() message: Message) {
     const keyRedis =message.username + ':' + message.date;
     message.countMessage = await this.app.getRedis(keyRedis);
     console.table(message)
-    this.server.emit('message', message)
+    this.serverCount.emit('countMessage', message)
   }
 
   handleConnection(@ConnectedSocket() client: Socket) {
