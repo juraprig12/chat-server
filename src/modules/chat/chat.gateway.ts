@@ -4,6 +4,7 @@ import { Server, Socket } from "socket.io";
 import { ChatService } from './chat.service';
 import { Message } from './types/Message';
 import { AppController } from 'src/app.controller';
+import { Client } from 'socket.io/dist/client';
 
 @WebSocketGateway({
   namespace: 'chat',
@@ -17,7 +18,7 @@ export class ChatGateway implements OnGatewayConnection, OnGatewayDisconnect {
 
   @WebSocketServer() server: Server<ClientToServerListen, ServerToClientListen>
   @SubscribeMessage('message')
-  async handleMessage(@MessageBody() message: Message) {
+  async handleMessage( @MessageBody() message: Message ) {
     const keyRedis =message.username;
     const valueRedis = message.message; 
     await this.app.setRedis(keyRedis, valueRedis);
@@ -27,7 +28,7 @@ export class ChatGateway implements OnGatewayConnection, OnGatewayDisconnect {
 
   @WebSocketServer() serverCount: Server<ClientToServerListenCount, ServerToClientListenCount>
   @SubscribeMessage('countMessage')
-  async handleCountMessage(@MessageBody() message: Message) {
+  async handleCountMessage( /*@ConnectedSocket() Client: Socket,*/ @MessageBody() message: Message ) {
     const keyRedis =message.username + ':' + message.date;
     message.countMessage = await this.app.getRedis(keyRedis);
     console.table(message)
