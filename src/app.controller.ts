@@ -1,4 +1,4 @@
-import { Controller, Get, Post, Body } from '@nestjs/common';
+import { Controller, Get, Body } from '@nestjs/common';
 import { AppService } from './app.service';
 import { InjectRedis, Redis } from '@nestjs-modules/ioredis';
 

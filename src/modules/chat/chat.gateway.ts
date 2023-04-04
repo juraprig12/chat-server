@@ -4,7 +4,7 @@ import { Server, Socket } from "socket.io";
 import { ChatService } from './chat.service';
 import { Message } from './types/Message';
 import { AppController } from 'src/app.controller';
-import { Client } from 'socket.io/dist/client';
+//import { Client } from 'socket.io/dist/client';
 
 @WebSocketGateway({
   namespace: 'chat',
