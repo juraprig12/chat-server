@@ -11,14 +11,14 @@ export class ChatService {
         this.#clients.push(client)
         console.log(this.#clients.length)
         const keyRedis = "Сейчас клиентов в чате";
-        const valueRedis = Number(await this.redis.get(keyRedis)) + 1;
+        const valueRedis = this.#clients.length;
         await this.redis.set(keyRedis, valueRedis);
     }
     async removeClient(id: string) {
         this.#clients = this.#clients.filter(client => client.id !== id)
         console.log(this.#clients.length)
         const keyRedis = "Сейчас клиентов в чате";
-        const valueRedis = Number(await this.redis.get(keyRedis)) - 1;
+        const valueRedis = this.#clients.length;
         await this.redis.set(keyRedis, valueRedis);
     }
     getClientId(id: string): Socket  {
