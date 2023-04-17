@@ -17,7 +17,7 @@ export class AppController {
     const keyRedis = inputKeyRedis + ':' + inputValueRedis;
     const valueRedis = Number(await this.redis.get(keyRedis)) + 1;
     await this.redis.set(keyRedis, valueRedis);
-    console.log(`Введено в базу redis: ${keyRedis}, ${valueRedis}`);
+    console.log(`Introduced into the redis database: ${keyRedis}, ${valueRedis}`);
   }
   
   @Get()

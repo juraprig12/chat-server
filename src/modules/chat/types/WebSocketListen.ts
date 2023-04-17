@@ -1,15 +1,15 @@
 import { Message } from "./Message";
 
 export interface ClientToServerListen {
-    message: (message: Message) => void
+    messageToServer: (message: Message) => void
 }
 export interface ServerToClientListen {
-    message: (message: Message) => void
+    messageToClient: (message: Message) => void
 }
 
 export interface ClientToServerListenCount {
-    countMessage: (message: Message) => void
+    countMessageToServer: (message: Message) => void
 }
 export interface ServerToClientListenCount {
-    countMessage: (message: Message) => void
+    countMessageToClient: (message: Message) => void
 }

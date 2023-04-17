@@ -10,16 +10,12 @@ export class ChatService {
     async addClient(client: Socket): Promise<void> {
         this.#clients.push(client)
         console.log(this.#clients.length)
-        const keyRedis = "Сейчас клиентов в чате";
-        const valueRedis = this.#clients.length;
-        await this.redis.set(keyRedis, valueRedis);
+        await this.redis.set("nowCustomersInChat", this.#clients.length);
     }
     async removeClient(id: string) {
         this.#clients = this.#clients.filter(client => client.id !== id)
         console.log(this.#clients.length)
-        const keyRedis = "Сейчас клиентов в чате";
-        const valueRedis = this.#clients.length;
-        await this.redis.set(keyRedis, valueRedis);
+        await this.redis.set("nowCustomersInChat", this.#clients.length);
     }
     getClientId(id: string): Socket  {
         return this.#clients.find(client => client.id === id)
