@@ -20,8 +20,8 @@ export class ChatGateway implements OnGatewayConnection, OnGatewayDisconnect {
   @SubscribeMessage('messageToServer')
   async handleMessage( @MessageBody() message: Message ) {
     const keyRedis =message.username;
-    const valueRedis = message.message; 
-    await this.app.setRedis(keyRedis, valueRedis);
+    const dateMessageRedis = message.date; 
+    await this.app.setRedis(keyRedis, dateMessageRedis);
     console.table(message)
     this.server.emit('messageToClient', message)
   }
@@ -29,10 +29,11 @@ export class ChatGateway implements OnGatewayConnection, OnGatewayDisconnect {
   @WebSocketServer() serverCount: Server<ClientToServerListenCount, ServerToClientListenCount>
   @SubscribeMessage('countMessageToServer')
   async handleCountMessage( /*@ConnectedSocket() Client: Socket,*/ @MessageBody() message: Message ) {
-    const keyRedis =message.username + ':' + message.date;
-    message.countMessage = await this.app.getRedis(keyRedis);
-    console.table(message)
-    this.serverCount.emit('countMessageToClient', message)
+    const keyRedis =message.username;
+    //message.countMessage = await this.app.getRedis(keyRedis);
+    //this.serverCount.emit('countMessageToClient', message)
+    const statsUser = await this.app.getRedis(keyRedis);
+    this.serverCount.emit('countMessageToClient', JSON.parse(statsUser))
   }
 
   handleConnection(@ConnectedSocket() client: Socket) {
