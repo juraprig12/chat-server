@@ -22,7 +22,7 @@ export class ChatGateway implements OnGatewayConnection, OnGatewayDisconnect {
     const keyRedis =message.username;
     const dateMessageRedis = message.date; 
     await this.app.setRedis(keyRedis, dateMessageRedis);
-    console.table(message)
+    //console.table(message)
     this.server.emit('messageToClient', message)
   }
 
